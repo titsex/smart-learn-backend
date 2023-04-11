@@ -1,0 +1,41 @@
+{
+  "name": "smart-learn-backend",
+  "description": "Backend студенческого сайта. Работа на сдачу квалификационного экзамена.",
+  "author": "titsex",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --project ./tsconfig.json && tscpaths --project tsconfig.json --src ./src -o ./build",
+    "start": "node ./build/index.js",
+    "dev": "ts-node-dev --project ./tsconfig.json --require tsconfig-paths/register ./src/index.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.12.0",
+    "bcrypt": "^5.1.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-validator": "^6.15.0",
+    "jsonwebtoken": "^9.0.0",
+    "nodemailer": "^6.9.1",
+    "redis": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.1",
+    "@types/node": "^18.15.11",
+    "@types/nodemailer": "^6.4.7",
+    "@typescript-eslint/eslint-plugin": "^5.58.0",
+    "@typescript-eslint/parser": "^5.58.0",
+    "eslint": "^8.38.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.7",
+    "prisma": "^4.12.0",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "tscpaths": "^0.0.9",
+    "typescript": "^5.0.4"
+  }
+}
