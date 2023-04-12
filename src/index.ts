@@ -9,11 +9,13 @@ import { asyncHandlerStack } from '@utils'
 import { Logger } from '@class/Logger'
 import { Database } from '@database'
 import { Cache } from '@class/Cache'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 const port = 5000 || process.env.PORT
 
 app.use(express.json())
+app.use(cookieParser())
 
 app.use('/api', asyncHandlerStack(router))
 app.use(errorMiddleware)
