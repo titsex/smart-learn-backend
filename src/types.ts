@@ -1,5 +1,6 @@
-import { NextFunction } from 'express'
+import { NextFunction, Request } from 'express'
 import { User } from '@prisma/client'
+import { GenerateUserInfo } from '@class/GenerateUserInfo'
 
 export enum COLORS {
     NONE = '\x1b[0',
@@ -32,3 +33,7 @@ export interface IValidationErrors {
 }
 
 export type BadRequestErrorType = IValidationErrors | IValidationErrors[]
+
+export interface IRequest extends Request {
+    user?: GenerateUserInfo
+}
