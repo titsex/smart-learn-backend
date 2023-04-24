@@ -25,7 +25,7 @@ export class AuthService {
 
         const password = await hash(data.password, randomNumber(5, 7))
 
-        const user: UserType = {
+        const user: Omit<UserType, 'id'> = {
             email: data.email,
             password,
             roles: [data.role],

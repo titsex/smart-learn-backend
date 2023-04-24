@@ -2,6 +2,7 @@ import { config } from 'dotenv'
 config()
 
 import errorMiddleware from '@middleware/error.middleware'
+import cookieParser from 'cookie-parser'
 import express from 'express'
 import router from '@router'
 
@@ -9,7 +10,6 @@ import { asyncHandlerStack } from '@utils'
 import { Logger } from '@class/Logger'
 import { Database } from '@database'
 import { Cache } from '@class/Cache'
-import cookieParser from 'cookie-parser'
 
 const app = express()
 const port = 5000 || process.env.PORT

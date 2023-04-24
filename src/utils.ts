@@ -1,5 +1,5 @@
+import { CustomRoute, expressFn, IAnyData, IValidationErrors } from '@types'
 import { validationMiddleware } from '@middleware/validation.middleware'
-import { CustomRoute, expressFn, IValidationErrors } from '@types'
 import { ValidationError, Result } from 'express-validator'
 import { Request, Router } from 'express'
 import { randomBytes } from 'crypto'
@@ -85,4 +85,18 @@ export const asyncHandlerStack = (router: Router) => {
     })
 
     return router
+}
+
+export const updateData = <T, K extends keyof T>(data: T, newData: IAnyData, exclude?: K[]) => {
+    for (const key of Object.keys(data as T[])) {
+        const value = data[key as keyof typeof data]
+        const newValue = newData[key as keyof typeof newData]
+
+        if (exclude?.includes(key as K)) continue
+        if (value === newValue) continue
+
+        data[key as keyof typeof data] = newValue
+    }
+
+    return data as T
 }

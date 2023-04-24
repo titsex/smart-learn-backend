@@ -1,6 +1,6 @@
+import { GenerateUserInfo } from '@class/GenerateUserInfo'
 import { NextFunction, Request } from 'express'
 import { User } from '@prisma/client'
-import { GenerateUserInfo } from '@class/GenerateUserInfo'
 
 export enum COLORS {
     NONE = '\x1b[0',
@@ -14,9 +14,11 @@ export enum COLOR_TYPES {
     BOLD = ';1m',
 }
 
-export type UserType = Omit<User, 'id' | 'createdAt' | 'updatedAt'>
+export type UserType = Omit<User, 'createdAt' | 'updatedAt'>
 
 export type expressFn = (req: Request, res: Response, next: NextFunction) => unknown
+
+export type BadRequestErrorType = IValidationErrors | IValidationErrors[]
 
 export interface Stack {
     handle: expressFn
@@ -32,8 +34,10 @@ export interface IValidationErrors {
     message: string
 }
 
-export type BadRequestErrorType = IValidationErrors | IValidationErrors[]
-
 export interface IRequest extends Request {
     user?: GenerateUserInfo
+}
+
+export interface IAnyData {
+    [key: string | number | symbol]: any
 }

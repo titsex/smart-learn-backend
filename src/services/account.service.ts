@@ -1,8 +1,8 @@
-import { RefreshDto } from '@dto/account/refresh.dto'
-import { TokenService } from '@service/token.service'
-import { prisma } from '@database'
 import { GenerateUserInfo } from '@class/GenerateUserInfo'
+import { TokenService } from '@service/token.service'
 import { Unauthorized } from '@class/Error'
+import { RefreshDto } from '@dto/account'
+import { prisma } from '@database'
 
 export class AccountService {
     public static async refresh(data: RefreshDto) {

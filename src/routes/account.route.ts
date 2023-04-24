@@ -3,7 +3,7 @@ import { Router } from 'express'
 
 const accountRouter = Router()
 
-accountRouter.get('/refresh', AccountController.refresh)
 accountRouter.post('/signout', AccountController.signout)
+accountRouter.get('/refresh', AccountController.refresh)
 
 export default accountRouter

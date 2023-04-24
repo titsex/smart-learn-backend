@@ -14,14 +14,16 @@ enum Roles {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-  tokens    Token[]
-  roles     Roles[]
-  solved    Test[]
+  id                Int        @id @default(autoincrement())
+  email             String     @unique
+  password          String
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt()
+  tokens            Token[]
+  roles             Roles[]
+  solved            Solved[]
+  createdTests      Test[]
+  createdCategories Category[]
 }
 
 model Token {
@@ -41,6 +43,8 @@ model Category {
   dislikes    Int     @default(0)
   test        Test    @relation(fields: [testId], references: [id])
   testId      Int
+  creator     User    @relation(fields: [creatorId], references: [id])
+  creatorId   Int
 }
 
 model Test {
@@ -50,5 +54,33 @@ model Test {
   likes       Int        @default(0)
   dislikes    Int        @default(0)
   categories  Category[]
-  solved      User[]
+  questions   Question[]
+  solved      Solved[]
+  creator     User       @relation(fields: [creatorId], references: [id])
+  creatorId   Int
+}
+
+model Solved {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+  test   Test @relation(fields: [testId], references: [id])
+  testId Int
+}
+
+model Question {
+  id          Int     @id @default(autoincrement())
+  test        Test    @relation(fields: [testId], references: [id])
+  testId      Int
+  title       String
+  description String?
+  answer      Answer?
+}
+
+model Answer {
+  id          Int      @id @default(autoincrement())
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId  Int      @unique
+  title       String
+  description String?
 }
