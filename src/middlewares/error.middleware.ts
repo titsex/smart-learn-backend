@@ -14,11 +14,10 @@ export default function errorMiddleware(
         let result = data
 
         if (data.errors) {
-            if (
-                (Array.isArray(data.errors) && !data.errors.length) ||
-                (!Array.isArray(data.errors) && !Object.keys(data.errors!).length)
-            )
-                result = (({ errors: _, ...rest }) => rest)(data)
+            const isArrayAndNotEmpty = Array.isArray(data.errors) && !data.errors.length
+            const isObjectAndNotEmpty = !Array.isArray(data.errors) && !Object.keys(data.errors!).length
+
+            if (isArrayAndNotEmpty || isObjectAndNotEmpty) result = (({ errors: _, ...rest }) => rest)(data)
         }
 
         return response.status(statusCode).json(result)

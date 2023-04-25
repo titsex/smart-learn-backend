@@ -1,8 +1,12 @@
 import { GenerateUserInfo } from '@class/GenerateUserInfo'
 import { TokenService } from '@service/token.service'
+import { RefreshDto, UpdateDto } from '@dto/account'
+import { generateUniqueHex, randomNumber, updateData } from '@utils'
 import { Unauthorized } from '@class/Error'
-import { RefreshDto } from '@dto/account'
 import { prisma } from '@database'
+import { hash } from 'bcrypt'
+import { MailerService } from '@service/mailer.service'
+import { Cache } from '@class/Cache'
 
 export class AccountService {
     public static async refresh(data: RefreshDto) {
@@ -47,5 +51,45 @@ export class AccountService {
                 id: candidate.id,
             },
         })
+    }
+
+    public static async update(data: UpdateDto, id: number) {
+        const user = await prisma.user.findUnique({
+            where: {
+                id,
+            },
+        })
+
+        if (data.password) data.password = await hash(data.password, randomNumber(5, 7))
+
+        const updated = updateData(user!, data, ['id', 'updatedAt', 'email', 'roles', 'createdAt'])
+
+        const confirmationLink = generateUniqueHex()
+        await MailerService.sendMail(updated.email, confirmationLink, 'Обновление данных аккаунта')
+
+        await Cache.setCache(`${updated.email}/${confirmationLink}`, JSON.stringify(updated))
+        return { message: 'Мы отправили вам на почту ссылку для подтверждения смены данных на аккаунте' }
+    }
+
+    public static async confirmUpdate(hex: string, id: number) {
+        const user = await prisma.user.findUnique({
+            where: {
+                id,
+            },
+        })
+
+        const cachedData = await Cache.getCache(`${user!.email}/${hex}`)
+        if (!cachedData) throw new Error('Скорее всего истекло время, либо неверный код подтверждения')
+
+        await Cache.deleteCache(`${user!.email}/${hex}`)
+
+        const { password: _, ...updatedUserData } = await prisma.user.update({
+            where: {
+                id,
+            },
+            data: JSON.parse(cachedData),
+        })
+
+        return updatedUserData
     }
 }

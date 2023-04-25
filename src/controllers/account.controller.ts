@@ -1,5 +1,7 @@
 import { AccountService } from '@service/account.service'
 import { Request, Response } from 'express'
+import { UpdateDto } from '@dto/account'
+import { IRequest } from '@types'
 import { getIp } from '@utils'
 
 export class AccountController {
@@ -20,5 +22,21 @@ export class AccountController {
         response.clearCookie('refreshToken')
 
         return response.status(200).json({ message: 'Вы успешно вышли из системы' })
+    }
+
+    public static async update(request: IRequest, response: Response) {
+        const { password } = request.body as UpdateDto
+
+        const result = await AccountService.update({ password }, request.user!.id)
+
+        return response.status(200).json(result)
+    }
+
+    public static async confirmUpdate(request: IRequest, response: Response) {
+        const { hex } = request.params
+
+        const updatedUserData = await AccountService.confirmUpdate(hex, request.user!.id)
+
+        return response.status(200).json(updatedUserData)
     }
 }

@@ -12,11 +12,11 @@ export class MailerService {
         },
     })
 
-    public static async sendActivationMail(to: string, hex: string) {
+    public static async sendMail(to: string, hex: string, subject: string) {
         await this.transporter.sendMail({
             from: process.env.EMAIL,
             to,
-            subject: `Активация аккаунта`,
+            subject,
             text: hex,
         })
     }

@@ -1,4 +1,4 @@
 export class RefreshDto {
-    refreshToken!: string
-    ip!: string
+    public refreshToken!: string
+    public ip!: string
 }

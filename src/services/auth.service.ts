@@ -32,7 +32,7 @@ export class AuthService {
         }
 
         const activationLink = generateUniqueHex()
-        await MailerService.sendActivationMail(user.email, activationLink)
+        await MailerService.sendMail(user.email, activationLink, 'Активация аккаунта')
 
         await Cache.setCache(`${user.email}/${activationLink}`, JSON.stringify(user))
         return { message: 'Мы отправили вам на почту ссылку для активации аккаунта' }
